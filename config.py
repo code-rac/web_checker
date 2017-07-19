@@ -24,10 +24,3 @@ class Config:
 
 if __name__ == '__main__':
     c = Config()
-    data = {'create' : {
-        '_index' : 'webassistant',
-        '_type' : 'type',
-        'msg' : 'test'
-    }}
-    # helpers.bulk(c.es, data)
-    c.es.bulk(data)

@@ -52,7 +52,7 @@ class Url:
         return config.mysql_cur.fetchone()[0]
 
     def get_user_url(self):
-    	config.mysql_cur.execute('''SELECT u.id,m.user_id FROM masters AS m, urls AS u, master_urls AS mu WHERE mu.master_id=m.id AND mu.url_id=u.id''')
+        config.mysql_cur.execute('''SELECT u.id,m.user_id FROM masters AS m, urls AS u, master_urls AS mu WHERE mu.master_id=m.id AND mu.url_id=u.id''')
         return config.mysql_cur.fetchall()
 
     def update_status(self, status, url_id):
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     reset_database()
     os.system('python reset_database.py')
 
-    print User().get()
-    print Url().get()
-    print Master().get()
-    print MasterUrl().get()
+    print(User().get())
+    print(Url().get())
+    print(Master().get())
+    print(MasterUrl().get())

@@ -7,7 +7,7 @@ N_EPOCHS = 5 # request N_EPOCHS time each time
 N_BATCHES = 2
 JOBS = []
 USER_URLS = []
-INTERVAL = 20
+INTERVAL = 180
 LOCK = threading.Lock()
 GAP = 1
 CACHE_EVENT_URL = {} # {#url_id: {
@@ -17,6 +17,7 @@ CACHE_EVENT_URL = {} # {#url_id: {
 				     # }
 
 class Checker(threading.Thread):
+
 	def __init__(self):
 		threading.Thread.__init__(self)
 		self.sess = requests.session()
@@ -58,11 +59,9 @@ class Checker(threading.Thread):
 						'_type' : 'datapoint'
 					}
 					metadata.update(datapoint)
-					# print metadata
 					yield metadata
 
-
-	def calculate_events(self, url_id):
+	def calculate_event(self, url_id):
 		global CACHE_EVENT_URL
 		assert len(self.datapoints) > 0 and len(self.datapoints) <= N_EPOCHS
 		
@@ -108,9 +107,8 @@ class Checker(threading.Thread):
 				return [metadata]
 			return []
 
-
 	def event_generator(self, url_id):
-		for event in self.calculate_events(url_id):
+		for event in self.calculate_event(url_id):
 			for _url_id, _user_id in USER_URLS:
 				if _url_id == url_id:
 					metadata = {
@@ -120,9 +118,8 @@ class Checker(threading.Thread):
 						'_type' : 'event'
 					}
 					metadata.update(event)
-					print metadata
+					print(metadata)
 					yield metadata
-
 
 	def request(self, url):
 		for i in range(N_EPOCHS): 
@@ -147,6 +144,7 @@ class Checker(threading.Thread):
 				time.sleep(0.1)
 				
 class WebChecker():
+
 	def __init__(self):
 		self.url = Url()
 	
@@ -154,7 +152,7 @@ class WebChecker():
 		new_threads = int(self.url.count() / N_BATCHES * 3) - threading.active_count()
 		if new_threads > 0:
 			for i in range(new_threads):
-				print 'Start new thread', threading.active_count()
+				print('Start new thread', threading.active_count())
 				thread = Checker()
 				thread.daemon = True
 				thread.start()
@@ -172,7 +170,7 @@ class WebChecker():
 			JOBS += urls[0:N_BATCHES]
 			LOCK.release()
 			urls = urls[N_BATCHES:]
-			print JOBS
+			print(JOBS)
 			# print '    continue in', INTERVAL / len_urls * N_BATCHES
 			time.sleep(INTERVAL / len_urls * N_BATCHES)
 		
@@ -192,8 +190,6 @@ class WebChecker():
 			self.decon()
 			self.reschedule()
 			time.sleep(1)
-			# print JOBS
-
 
 if __name__ == '__main__':
 	WebChecker().run()
