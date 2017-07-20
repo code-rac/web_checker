@@ -34,22 +34,24 @@ class Config:
 
     def get_mysql(self):
         while 1:
+            MYSQL_LOCK.acquire()
             if self.mysql_connections:
-                MYSQL_LOCK.acquire()
                 # print(len(self.mysql_connections))
                 conn, cur = self.mysql_connections.pop(0)
                 MYSQL_LOCK.release()
                 return conn, cur
+            MYSQL_LOCK.release()
             time.sleep(0.1)
 
     def get_es(self):
         while 1:
+            ES_LOCK.acquire()
             if self.elasticsearch_connections:
-                ES_LOCK.acquire()
                 # print(len(self.elasticsearch_connections))
                 es = self.elasticsearch_connections.pop(0)
                 ES_LOCK.release()
                 return es
+            ES_LOCK.release()
             time.sleep(0.1)
 
     def append_mysql(self, conn, cur):

@@ -7,10 +7,10 @@ N_EPOCHS = 5 # request N_EPOCHS time each time
 N_BATCHES = 6
 JOBS = []
 USER_URLS = []
-INTERVAL = 60
+INTERVAL = 143
 LOCK = threading.Lock()
 GAP = 1
-SAFETY_PARAM = 1.2
+SAFETY_PARAM = 3
 CACHE_EVENT_URL = {} # {#url_id: {
 				     #       end_status_code : #end_status_code
 				     #       end_timestamp : #end_timestamp
@@ -119,7 +119,7 @@ class Checker(threading.Thread):
 						'_type' : 'event'
 					}
 					metadata.update(event)
-					print(metadata)
+					# print(metadata)
 					yield metadata
 
 	def request(self, url):
@@ -171,7 +171,7 @@ class WebChecker():
 			JOBS += urls[0:N_BATCHES]
 			LOCK.release()
 			urls = urls[N_BATCHES:]
-			print(JOBS)
+			print('Number of jobs =', len(JOBS))
 			# print '    continue in', INTERVAL / len_urls * N_BATCHES
 			time.sleep(INTERVAL / len_urls * N_BATCHES)
 		
