@@ -170,8 +170,9 @@ if __name__ == '__main__':
 	dir_name = os.path.dirname(os.path.abspath(__file__))
 	file_name = os.path.join(dir_name, 'web_checker.py')
 	print dir_name, file_name
-	# S = Service('web_checker', dir_name, '/usr/share/miniconda2/bin/python ' + file_name)
-	# S.enable()
+	S = Service('web_checker', dir_name, '/usr/share/miniconda2/bin/python ' + file_name)
+	S.enable()
+	S.start()
 	# S.stop()
 	# pprint(S.__dict__)
 	
