@@ -110,7 +110,11 @@ class Checker(threading.Thread):
 
 	def event_generator(self, url_id):
 		for event in self.calculate_event(url_id):
+
 			for _url_id, _user_id in USER_URLS:
+				if event['duration'] == None:
+					if self.event.has_first_event(_user_id, _url_id):
+						continue
 				if _url_id == url_id:
 					metadata = {
 						'user_id' : _user_id,

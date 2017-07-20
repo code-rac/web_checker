@@ -149,19 +149,21 @@ class Event:
         es = config.get_es()
         helpers.bulk(es, event_generator)
         config.append_es(es)
-        
+
+    def had_first_event(self, user_id, url_id):
+        es = config.get_es()
+        query = {
+            'query': {
+                'match': {'user_id': user_id},
+                'match': {'url_id': url_id}
+            }
+        }
+        if es.count(index='webassistant3', doc_type='event', body=query)['count']:
+            result = True
+        else:
+            result = False
+        config.append_es(es)
+        return result
+
 if __name__ == '__main__':
-    import os
-
-    # User().migrate()
-    # Url().migrate()
-    # Master().migrate()
-    # MasterUrl().migrate()
-    
-    # reset_database()
-    # os.system('python reset_database.py')
-
-    print(User().get())
-    print(Url().get())
-    print(Master().get())
-    print(MasterUrl().get())
+    Event().first_event(33, 1)
