@@ -82,13 +82,14 @@ class Checker(threading.Thread):
                 'start_status_code': last_datapoint['status_code'],
                 'duration': None,
                 'timestamp': timestamp,
-                'screenshot': None
+                'screenshot': None,
+                'type' : None
             }
             if metadata['start_status_code'] == 200:
                 self.url.update_status(1, url_id)
             else:
                 self.url.update_status(0, url_id)
-
+            metadata['type'] = 'Start'
             return [metadata]
 
         else:
@@ -98,7 +99,8 @@ class Checker(threading.Thread):
                     'start_status_code': last_datapoint['status_code'],
                     'duration': timestamp - CACHE_EVENT_URL[url_id]['end_timestamp'],
                     'timestamp': timestamp,
-                    'screenshot': None
+                    'screenshot': None,
+                    'type': None
                 }
                 CACHE_EVENT_URL[url_id] = {
                     'end_status_code': last_datapoint['status_code'],
@@ -108,7 +110,11 @@ class Checker(threading.Thread):
                     self.url.update_status(1, url_id)
                 else:
                     self.url.update_status(0, url_id)
-
+          			
+                if metadata['start_status_code'] < 400:
+          			metadata['type'] = 'Up'
+          		else:
+          			metadata['type'] = 'Down'
                 return [metadata]
             return []
 
@@ -127,7 +133,7 @@ class Checker(threading.Thread):
                         '_type': 'event'
                     }
                     metadata.update(event)
-                    # print(metadata)
+                    print(metadata)
                     yield metadata
 
     def request(self, url):
