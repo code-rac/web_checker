@@ -4,12 +4,13 @@ from pprint import pprint
 import threading
 
 N_EPOCHS = 5 # request N_EPOCHS time each time 
-N_BATCHES = 2
+N_BATCHES = 6
 JOBS = []
 USER_URLS = []
-INTERVAL = 180
+INTERVAL = 60
 LOCK = threading.Lock()
 GAP = 1
+SAFETY_PARAM = 1.2
 CACHE_EVENT_URL = {} # {#url_id: {
 				     #       end_status_code : #end_status_code
 				     #       end_timestamp : #end_timestamp
@@ -149,7 +150,7 @@ class WebChecker():
 		self.url = Url()
 	
 	def decon(self):
-		new_threads = int(self.url.count() / N_BATCHES * 3) - threading.active_count()
+		new_threads = int(self.url.count() / N_BATCHES * SAFETY_PARAM) - threading.active_count()
 		if new_threads > 0:
 			for i in range(new_threads):
 				print('Start new thread', threading.active_count())
