@@ -113,7 +113,7 @@ class Checker(threading.Thread):
 
 			for _url_id, _user_id in USER_URLS:
 				if event['duration'] == None:
-					if self.event.has_first_event(_user_id, _url_id):
+					if self.event.had_first_event(_user_id, _url_id):
 						continue
 				if _url_id == url_id:
 					metadata = {

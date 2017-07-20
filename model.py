@@ -166,4 +166,8 @@ class Event:
         return result
 
 if __name__ == '__main__':
-    Event().first_event(33, 1)
+    from elasticsearch import Elasticsearch
+    es = Elasticsearch(['192.168.1.65:9200'])
+    # es.delete(index='webassistant3', ignore=[400, 404])
+    es.create(index='webassistant3', ignore=[400, 404])
+    # Event().first_event(33, 1)
