@@ -167,10 +167,11 @@ class Service(object):
 		return res
 
 if __name__ == '__main__':
-	file_name = os.path.abspath(__file__)
-	dir_name = os.path.dirname(file_name)
-	S = Service('webchecker', dir_name, '/usr/bin/python ' + file_name)
-	S.enable()
-	S.stop()
+	dir_name = os.path.dirname(os.path.abspath(__file__))
+	file_name = os.path.join(dir_name, 'web_checker.py')
+	print dir_name, file_name
+	# S = Service('web_checker', dir_name, '/usr/share/miniconda2/bin/python ' + file_name)
+	# S.enable()
+	# S.stop()
 	# pprint(S.__dict__)
 	
