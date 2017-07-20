@@ -110,11 +110,11 @@ class Checker(threading.Thread):
                     self.url.update_status(1, url_id)
                 else:
                     self.url.update_status(0, url_id)
-          			
+                      
                 if metadata['start_status_code'] < 400:
-          			metadata['type'] = 'Up'
-          		else:
-          			metadata['type'] = 'Down'
+                    metadata['type'] = 'Up'
+                else:
+                    metadata['type'] = 'Down'
                 return [metadata]
             return []
 
